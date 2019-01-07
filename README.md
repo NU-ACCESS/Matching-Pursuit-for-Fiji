@@ -1,5 +1,5 @@
 # Matching-Pursuit-for-Fiji
-Python script for Fiji based on sparse weights, w, given an image X and a dictionary D following this cost function ||X-Dw|. 
+Python script for Fiji based on sparse weights, w, given an image X and a dictionary D following this cost function ||X-Dw||. 
 
 Based on these java libraries for sparse modeling: http://www.ux.uis.no/~karlsk/dle/mpv2-class.zip. 
 
