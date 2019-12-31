@@ -4,7 +4,7 @@ Python script for Fiji based on sparse weights, w, given an image X and a dictio
 Based on these java libraries for sparse modeling: http://www.ux.uis.no/~karlsk/dle/mpv2-class.zip. 
 
 1) Download zipfile, extract it, rename as mpv, and install in plugins folder. 
-2) Create an over complete dictionary D with atoms constructed from the hyperspectral measurement of pure pigments (e.g., from the pigment boards we have in the lab). Make sure the atoms are normalized (0 min, 1 max). Make sure the image X is also normalized in the same way.
-save these atoms in a text file with the spectra arranged in columns.
+2) Create an over complete dictionary D with atoms constructed from the hyperspectral measurement of pure pigments (e.g., from the pigment boards we have in the lab). Ensure that the atoms in D and the image X are normalized (0 min, 1 max).
+3) Save D as a text file with the spectra arranged in columns.
 
-This code is still experimental... more to come
+After running the script, at the prompt input the path to the D text file.
