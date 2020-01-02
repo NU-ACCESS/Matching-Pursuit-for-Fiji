@@ -12,9 +12,9 @@ from mpv2 import MatchingPursuit as MP, JamaMatrix as Matrix, SymmetricMatrix as
 
 #Input parameters
 gd = GenericDialogPlus("Sparse Approximation, Input Parameters")  
-gd.addDirectoryOrFileField("Select dictionary D","")
+gd.addDirectoryOrFileField("Select dictionary","")
 gd.addChoice("Greedy algorithm type", ["MP","OMP","ORMP"], "OMP")
-gd.addNumericField("Number of non-zero elements in w", 3, 0)  # show 3 decimals
+gd.addNumericField("Number of non-zero elements", 3, 0)  # show 3 decimals
 gd.showDialog()
 
 directory_w = gd.getNextString()
