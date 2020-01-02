@@ -7,17 +7,26 @@ from ij import IJ, ImagePlus
 from ij.plugin import ImageCalculator
 from ij.process import ImageProcessor
 from ij.process import FloatProcessor
-#import sys
-#sys.path.append('Jama.jar')
-#from Jama import Matrix
+from fiji.util.gui  import GenericDialogPlus
 from mpv2 import MatchingPursuit as MP, JamaMatrix as Matrix, SymmetricMatrix as SM
+
+#Input parameters
+gd = GenericDialogPlus("Sparse Approximation, Input Parameters")  
+gd.addDirectoryOrFileField("Select dictionary D","")
+gd.addChoice("Greedy algorithm type", ["MP","OMP","ORMP"], "OMP")
+gd.addNumericField("Number of non-zero elements in w", 3, 0)  # show 3 decimals
+gd.showDialog()
+
+directory_w = gd.getNextString()
+t_w = int(gd.getNextNumber()) 
+Rt = gd.getNextChoice()
 
 imp2 = IJ.getImage()
 IJ.run("32-bit")
 imp2 = IJ.getImage()
 
 #path to lighting directions
-IJ.run("Text Image... ", "open=")
+IJ.run("Text Image... ", "open="+str(directory_w))
 imp = IJ.getImage()
 imp.setTitle("Dictionary Atoms")
 
@@ -46,13 +55,21 @@ jD = Matrix(L)
 jDD = SM(K,K).eqInnerProductMatrix(jD)
 jMP = MP(jD,jDD)
 
+
+
 # matching pursuit to create a sparse appoximation
+
 w =[]
 for i in range(0, p):
-  q = x[i]
-  W = jMP.vsBMP(q,K)   
-  w.append(W)
-
+	q = x[i]
+	if Rt == "OMP":
+		W = jMP.vsOMP(q,t_w)
+	elif Rt == "MP":
+		W = jMP.vsBMP(q,t_w)
+	else: 
+		W = jMP.vsORMP(q,t_w)
+	w.append(W)
+		
 w2 = zip(*w)
 
 Sp = Matrix(w2).getColumnPackedCopy()
@@ -61,12 +78,8 @@ Sp = Matrix(w2).getColumnPackedCopy()
 ipFloat = FloatProcessor(K, imp2.height*imp2.width, Sp)
 impa = ImagePlus("Sp", ipFloat)
 impa.show()
-
-#reshape as using montage and reslice commands (need a better way to do this) 
-IJ.run(impa,"Montage to Stack...", "images_per_row=1 images_per_column=%d border=0" % imp2.height)
-impb = IJ.getImage()
+IJ.run("Montage to Stack...", "columns=1 rows="+str(imp2.height)+" border=0")
+imp3=IJ.getImage()
 IJ.run("Reslice [/]...", "output=1.000 start=Left avoid")
-impc = IJ.getImage()
-
 impa.close()
-impb.close()
+imp3.close()
